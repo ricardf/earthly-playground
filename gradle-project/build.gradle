@@ -19,3 +19,12 @@ dependencies {
     implementation "joda-time:joda-time:2.2"
     testImplementation "junit:junit:4.12"
 }
+
+test {
+    reports {
+        junitXml.enabled = true
+        html.enabled = true
+    }
+    useJUnit()
+    
+}
