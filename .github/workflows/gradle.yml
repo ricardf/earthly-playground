@@ -22,6 +22,8 @@ jobs:
       - name: Build and push
         if: success() && github.ref == 'refs/heads/main'
         run: |
-          earthly --push -ci +test
-          earthly --push --ci +docker 
+          earthly --push --ci +deps
+          earthly --push --ci +build
+          earthly --push --ci +test
+          earthly --push --ci +docker
         working-directory: ./gradle-project
