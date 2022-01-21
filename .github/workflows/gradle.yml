@@ -11,6 +11,8 @@ jobs:
     name: example earthly test
     runs-on: ubuntu-latest
     steps:
+      - name: Log in to registry cache 
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - uses: earthly/actions/setup-earthly@v1
         with:
           version: v0.6.4
