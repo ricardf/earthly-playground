@@ -6,7 +6,7 @@ WORKDIR /gradle-project
 deps:
     COPY build.gradle ./
     RUN gradle build
-    SAVE IMAGE --push --ci ghcr.io/ricardf/earthly-playground-deps
+    SAVE IMAGE --push --ci ghcr.io/ricardf/earthly-playground:deps
 
 build:
     FROM +deps
@@ -14,10 +14,10 @@ build:
     RUN gradle build
     RUN gradle install
     SAVE ARTIFACT build AS LOCAL build
-    SAVE IMAGE --push --ci ghcr.io/ricardf/earthly-playground-build
+    SAVE IMAGE --push --ci ghcr.io/ricardf/earthly-playground:build
 
 docker:
     COPY +build/build/install/gradle-project/bin bin
     COPY +build/build/install/gradle-project/lib lib
     ENTRYPOINT ["/gradle-project/bin/java-example"]
-    SAVE IMAGE --push --ci ghcr.io/ricardf/earthly-playground
+    SAVE IMAGE --push ghcr.io/ricardf/earthly-playground
