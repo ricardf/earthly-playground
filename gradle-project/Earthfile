@@ -1,0 +1,21 @@
+VERSION 0.6
+FROM eclipse-temurin:11-alpine
+RUN apk add --update --no-cache gradle=7.2-r0
+WORKDIR /java-example
+
+deps:
+    COPY build.gradle ./
+    RUN gradle build
+
+build:
+    FROM +deps
+    COPY src src
+    RUN gradle build
+    RUN gradle install
+    SAVE ARTIFACT build AS LOCAL build
+
+docker:
+    COPY +build/build/install/java-example/bin bin
+    COPY +build/build/install/java-example/lib lib
+    ENTRYPOINT ["/java-example/bin/java-example"]
+    SAVE IMAGE --push earthly/examples:java
