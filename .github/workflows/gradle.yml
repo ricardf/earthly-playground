@@ -17,6 +17,15 @@ jobs:
       - uses: actions/checkout@v2
       - name: what version is installed?
         run: earthly --version
-      - name: run the earthly hello world
-        run: earthly +build
+      - name: Build and Push All Images
+        # Make this step dependent on the success of the previous one (ECR credentials)
+        if: success()
+        run: |
+          earthly --push --ci +docker
+        working-directory: ./gradle-project
+      # Only push latest tags on main branch
+      - name: Push All Latest Images
+        if: success() && github.ref == 'refs/heads/main'
+        run: |
+          earthly --push --ci +docker --build-arg container_tag_suffix=""
         working-directory: ./gradle-project
